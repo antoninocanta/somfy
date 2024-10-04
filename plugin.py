@@ -27,9 +27,9 @@
         <param field="Password" label="Password" width="200px" required="true" default="" password="true"/>
         <param field = "Mode5" required="true" label="Connection" width="100px">
             <options>
-                <option label="Europe, Middle East and Africa" value="ha101-1.overkiz.com" default="true"/>
-                <option label="Asia and Pacific" value="ha201-1.overkiz.com"/>
-                <option label="North America" value="ha401-1.overkiz.com"/>
+                <option label="Europe, Middle East and Africa" value="https://ha101-1.overkiz.com" default="true"/>
+                <option label="Asia and Pacific" value="https://ha201-1.overkiz.com"/>
+                <option label="North America" value="https://ha401-1.overkiz.com"/>
             </options>
         </param>
         <param field="Mode2" label="Refresh interval" width="100px">
