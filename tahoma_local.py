@@ -17,7 +17,7 @@ import requests.packages.urllib3
 requests.packages.urllib3.disable_warnings()
 
 class TahomaWebApi:
-    base_url_web = "https://ha101-1.overkiz.com"
+    #base_url_web = "https://ha101-1.overkiz.com"
     headers_url = {"Content-Type": "application/x-www-form-urlencoded"}
     headers_json = {"Content-Type": "application/json"}
     headers_with_token = {"Content-Type": "application/json"}
@@ -37,9 +37,10 @@ class TahomaWebApi:
         else:
             return False
 
-    def tahoma_login(self, username, password):
+    def tahoma_login(self, username, password, base_url_web):
         data = {"userId": username, "userPassword": password}
-        response = requests.post(self.base_url_web + self.login_url, headers=self.headers_url, data=data, timeout=self.timeout)
+        #response = requests.post(self.base_url_web + self.login_url, headers=self.headers_url, data=data, timeout=self.timeout)
+        response = requests.post(base_url_web + self.login_url, headers=self.headers_url, data=data, timeout=self.timeout)
         Data = response.json()
         logging.debug("Login respone: status_code: '"+str(response.status_code)+"' reponse body: '"+str(response.json())+"'")
 
@@ -74,11 +75,12 @@ class TahomaWebApi:
                 return
         return self.__logged_in
 
-    def generate_token(self, pin):
+    def generate_token(self, pin, base_url_web):
         url_gen = "/enduser-mobile-web/enduserAPI/config/"+pin+"/local/tokens/generate"
         logging.debug("generate token: url_gen = '" + url_gen + "'")
         logging.debug("generate token: cookie = '" + str(self.cookie) + "'")
-        response = requests.get(self.base_url_web + url_gen, headers=self.headers_json, cookies=self.cookie)
+        #response = requests.get(self.base_url_web + url_gen, headers=self.headers_json, cookies=self.cookie)
+        response = requests.get(base_url_web + url_gen, headers=self.headers_json, cookies=self.cookie)
         logging.debug("generate token: response = '" + str(response) + "'")
         
         if response.status_code == 200:
@@ -104,10 +106,11 @@ class TahomaWebApi:
         self.headers_with_token["Authorization"] = "Bearer " + str(self.__token)
         logging.debug("headers_with_token updated with new token")
 
-    def activate_token(self, pin, token):
+    def activate_token(self, pin, token, base_url_web):
         url_act = "/enduser-mobile-web/enduserAPI/config/"+pin+"/local/tokens"
         data_act = {"label": "Domoticz token", "token": token, "scope": "devmode"}
-        response = requests.post(self.base_url_web + url_act, headers=self.headers_json, json=data_act, cookies=self.cookie)
+        #response = requests.post(self.base_url_web + url_act, headers=self.headers_json, json=data_act, cookies=self.cookie)
+        response = requests.post(base_url_web + url_act, headers=self.headers_json, json=data_act, cookies=self.cookie)
         logging.debug("activate_token: response: "+str(response.json()))
 
         if response.status_code == 200:
@@ -119,9 +122,10 @@ class TahomaWebApi:
             raise exceptions.LoginFailure("failed to activate token")
         return response.json()
 
-    def get_tokens(self, pin):
+    def get_tokens(self, pin, base_url_web):
         url_act = "/enduser-mobile-web/enduserAPI/config/"+pin+"/local/tokens/devmode"
-        response = requests.get(self.base_url_web + url_act, headers=self.headers_json, cookies=self.cookie)
+        #response = requests.get(self.base_url_web + url_act, headers=self.headers_json, cookies=self.cookie)
+        response = requests.get(base_url_web + url_act, headers=self.headers_json, cookies=self.cookie)
 
         if response.status_code == 200:
             #self.token = response.json()['token']
@@ -133,9 +137,10 @@ class TahomaWebApi:
             raise exceptions.LoginFailure("failed to get tokens")
         return response.json()
 
-    def delete_tokens(self, pin, uuid):
+    def delete_tokens(self, pin, uuid, base_url_web):
         url_del = "/enduser-mobile-web/enduserAPI/config/"+pin+"/local/tokens/"+str(uuid)
-        response = requests.delete(self.base_url_web + url_del, headers=self.headers_json, cookies=self.cookie)
+        #response = requests.delete(self.base_url_web + url_del, headers=self.headers_json, cookies=self.cookie)
+        response = requests.delete(base_url_web + url_del, headers=self.headers_json, cookies=self.cookie)
 
         if response.status_code == 200:
             logging.debug("succeeded to delete token: " + str(response.json()))
