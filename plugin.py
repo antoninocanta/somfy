@@ -25,7 +25,7 @@
             <description>==== general configuration ====</description>
         </param>
         <param field="Password" label="Password" width="200px" required="true" default="" password="true"/>
-        <param field="UrlToken" label="Url Token" width="200px" required="true" default="">
+        <param field="Urltoken" label="Url Token" width="200px" required="true" default="">
             <options>
                 <option label="ha101-1.overkiz.com (Europe, Middle East and Africa)" value="ha101-1.overkiz.com"/>
                 <option label="ha201-1.overkiz.com (Asia and Pacific)" value="ha201-1.overkiz.com"/>
@@ -157,7 +157,11 @@ class BasePlugin:
             self.local = False
 
         try:
-            self.tahoma.tahoma_login(str(Parameters["Username"]), str(Parameters["Password"]), str(Parameters["UrlToken"]))
+            logging.debug(str(Parameters["Username"]))
+            logging.debug(str(Parameters["Password"]))
+            logging.debug(str(Parameters["Urltoken"]))
+            
+            self.tahoma.tahoma_login(str(Parameters["Username"]), str(Parameters["Password"]), str(Parameters["Urltoken"]))
         except exceptions.LoginFailure as exp:
             Domoticz.Error("Failed to login: " + str(exp))
             return False
@@ -168,7 +172,7 @@ class BasePlugin:
                 confToken = getConfigItem('token', '0')
                 if confToken == '0' or Parameters["Mode1"] == "True":
                     logging.debug("no token found, generate a new one")
-                    base_url_web = Parameters["UrlToken"]
+                    base_url_web = Parameters["Urltoken"]
                     self.tahoma.generate_token(pin,base_url_web)
                     self.tahoma.activate_token(pin,self.tahoma.token,base_url_web)
                     #store token for later use (not generate one at each start)
