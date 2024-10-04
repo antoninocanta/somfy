@@ -25,7 +25,7 @@
             <description>==== general configuration ====</description>
         </param>
         <param field="Password" label="Password" width="200px" required="true" default="" password="true"/>
-        <param field="Urltoken" label="Urltoken" width="200px" required="true" default="">
+        <param field="Mode7" label="Url token" width="200px" required="true" default="">
             <options>
                 <option label="Europe, Middle East and Africa" value="ha101-1.overkiz.com"/>
                 <option label="Asia and Pacific" value="ha201-1.overkiz.com"/>
@@ -159,9 +159,9 @@ class BasePlugin:
         try:
             logging.debug(str(Parameters["Username"]))
             logging.debug(str(Parameters["Password"]))
-            logging.debug(str(Parameters["Urltoken"]))
+            logging.debug(str(Parameters["Mode7"]))
             
-            self.tahoma.tahoma_login(str(Parameters["Username"]), str(Parameters["Password"]), str(Parameters["Urltoken"]))
+            self.tahoma.tahoma_login(str(Parameters["Username"]), str(Parameters["Password"]), str(Parameters["Mode7"]))
         except exceptions.LoginFailure as exp:
             Domoticz.Error("Failed to login: " + str(exp))
             return False
@@ -172,7 +172,7 @@ class BasePlugin:
                 confToken = getConfigItem('token', '0')
                 if confToken == '0' or Parameters["Mode1"] == "True":
                     logging.debug("no token found, generate a new one")
-                    base_url_web = Parameters["Urltoken"]
+                    base_url_web = Parameters["Mode7"]
                     self.tahoma.generate_token(pin,base_url_web)
                     self.tahoma.activate_token(pin,self.tahoma.token,base_url_web)
                     #store token for later use (not generate one at each start)
@@ -198,7 +198,7 @@ class BasePlugin:
     def onConnect(self, Connection, Status, Description):
         logging.debug("onConnect: Connection: '"+str(Connection)+"', Status: '"+str(Status)+"', Description: '"+str(Description)+"' self.tahoma.logged_in: '"+str(self.tahoma.logged_in)+"'")
         if (Status == 0 and not self.tahoma.logged_in):
-          self.tahoma.tahoma_login(str(Parameters["Username"]), str(Parameters["Password"]), str(Parameters["UrlToken"]))
+          self.tahoma.tahoma_login(str(Parameters["Username"]), str(Parameters["Password"]), str(Parameters["Mode7"]))
         elif (self.cookie and self.tahoma.logged_in and (not self.command)):
           event_list = self.tahoma.get_events()
           self.update_devices_status(event_list)
@@ -269,7 +269,7 @@ class BasePlugin:
         if (not self.tahoma.logged_in):
             logging.info("Not logged in, must connect")
             self.command = True
-            self.tahoma.tahoma_login(str(Parameters["Username"]), str(Parameters["Password"]), str(Parameters["UrlToken"]))
+            self.tahoma.tahoma_login(str(Parameters["Username"]), str(Parameters["Password"]), str(Parameters["Mode7"]))
             if self.tahoma.logged_in:
                 self.tahoma.register_listener()
 
@@ -340,7 +340,7 @@ class BasePlugin:
                     #web version: not logged in, so first set up a new login attempt
                     logging.debug("attempting to poll web version but not logged in")
                     try:
-                        self.tahoma.tahoma_login(str(Parameters["Username"]), str(Parameters["Password"]), str(Parameters["UrlToken"]))
+                        self.tahoma.tahoma_login(str(Parameters["Username"]), str(Parameters["Password"]), str(Parameters["Mode7"]))
                     except (requests.exceptions.ConnectionError) as exp:
                         Domoticz.Error("Failed to request data: " + str(exp))
                         logging.error("Failed to request data: " + str(exp))
