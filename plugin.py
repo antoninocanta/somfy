@@ -25,7 +25,7 @@
             <description>==== general configuration ====</description>
         </param>
         <param field="Password" label="Password" width="200px" required="true" default="" password="true"/>
-        <param field="Mode7" label="Url token" width="200px" required="true" default="">
+        <param field="Mode5" label="Url token" width="200px" required="true" default="">
             <options>
                 <option label="Europe, Middle East and Africa" value="ha101-1.overkiz.com"/>
                 <option label="Asia and Pacific" value="ha201-1.overkiz.com"/>
@@ -67,11 +67,6 @@
             </options>
         </param>
         <param field = "Port" label="Portnumber Tahoma box" width="30px" required="true" default="8443"/>
-        <param field = "Mode5" label="Log file location" width="300px">
-            <description>==== debug configuration ====
-            <br/>Enter a location for the logfile (omit final /), or leave empty to create logfile in the domoticz directory.
-            <br/>Default directory: '/home/user/domoticz' for raspberry pi</description>
-        </param>
         <param field = "Mode6" label="Debug logging" width="100px">
             <options>
                 <option label="True" value="Debug"/>
@@ -120,11 +115,11 @@ class BasePlugin:
         self.runCounter = 0
     
     def onStart(self):
-        if os.path.exists(Parameters["Mode5"]):
-            log_dir = Parameters["Mode5"] 
-        else:
-            Domoticz.Status("Location {0} does not exist, logging to default location".format(Parameters["Mode5"]))
-            log_dir = ""
+        #if os.path.exists(Parameters["Mode5"]):
+        #    log_dir = Parameters["Mode5"] 
+        #else:
+        #    Domoticz.Status("Location {0} does not exist, logging to default location".format(Parameters["Mode5"]))
+        log_dir = ""
         log_fullname = os.path.join(log_dir, self.log_filename)
         Domoticz.Status("Starting Tahoma blind plugin, logging to file {0}".format(log_fullname))
         self.logger = logging.getLogger('root')
@@ -159,9 +154,9 @@ class BasePlugin:
         try:
             logging.debug(str(Parameters["Username"]))
             logging.debug(str(Parameters["Password"]))
-            logging.debug(str(Parameters["Mode7"]))
+            logging.debug(str(Parameters["Mode5"]))
             
-            self.tahoma.tahoma_login(str(Parameters["Username"]), str(Parameters["Password"]), str(Parameters["Mode7"]))
+            self.tahoma.tahoma_login(str(Parameters["Username"]), str(Parameters["Password"]), str(Parameters["Mode5"]))
         except exceptions.LoginFailure as exp:
             Domoticz.Error("Failed to login: " + str(exp))
             return False
@@ -172,7 +167,7 @@ class BasePlugin:
                 confToken = getConfigItem('token', '0')
                 if confToken == '0' or Parameters["Mode1"] == "True":
                     logging.debug("no token found, generate a new one")
-                    base_url_web = Parameters["Mode7"]
+                    base_url_web = Parameters["Mode5"]
                     self.tahoma.generate_token(pin,base_url_web)
                     self.tahoma.activate_token(pin,self.tahoma.token,base_url_web)
                     #store token for later use (not generate one at each start)
@@ -198,7 +193,7 @@ class BasePlugin:
     def onConnect(self, Connection, Status, Description):
         logging.debug("onConnect: Connection: '"+str(Connection)+"', Status: '"+str(Status)+"', Description: '"+str(Description)+"' self.tahoma.logged_in: '"+str(self.tahoma.logged_in)+"'")
         if (Status == 0 and not self.tahoma.logged_in):
-          self.tahoma.tahoma_login(str(Parameters["Username"]), str(Parameters["Password"]), str(Parameters["Mode7"]))
+          self.tahoma.tahoma_login(str(Parameters["Username"]), str(Parameters["Password"]), str(Parameters["Mode5"]))
         elif (self.cookie and self.tahoma.logged_in and (not self.command)):
           event_list = self.tahoma.get_events()
           self.update_devices_status(event_list)
@@ -269,7 +264,7 @@ class BasePlugin:
         if (not self.tahoma.logged_in):
             logging.info("Not logged in, must connect")
             self.command = True
-            self.tahoma.tahoma_login(str(Parameters["Username"]), str(Parameters["Password"]), str(Parameters["Mode7"]))
+            self.tahoma.tahoma_login(str(Parameters["Username"]), str(Parameters["Password"]), str(Parameters["Mode5"]))
             if self.tahoma.logged_in:
                 self.tahoma.register_listener()
 
@@ -340,7 +335,7 @@ class BasePlugin:
                     #web version: not logged in, so first set up a new login attempt
                     logging.debug("attempting to poll web version but not logged in")
                     try:
-                        self.tahoma.tahoma_login(str(Parameters["Username"]), str(Parameters["Password"]), str(Parameters["Mode7"]))
+                        self.tahoma.tahoma_login(str(Parameters["Username"]), str(Parameters["Password"]), str(Parameters["Mode5"]))
                     except (requests.exceptions.ConnectionError) as exp:
                         Domoticz.Error("Failed to request data: " + str(exp))
                         logging.error("Failed to request data: " + str(exp))
