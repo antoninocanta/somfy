@@ -25,11 +25,11 @@
             <description>==== general configuration ====</description>
         </param>
         <param field="Password" label="Password" width="200px" required="true" default="" password="true"/>
-        <param field="Urltoken" label="Url Token" width="200px" required="true" default="">
+        <param field="Urltoken" label="Urltoken" width="200px" required="true" default="">
             <options>
-                <option label="ha101-1.overkiz.com (Europe, Middle East and Africa)" value="ha101-1.overkiz.com"/>
-                <option label="ha201-1.overkiz.com (Asia and Pacific)" value="ha201-1.overkiz.com"/>
-                <option label="ha401-1.overkiz.com (North America)" value="ha401-1.overkiz.com"/>
+                <option label="Europe, Middle East and Africa" value="ha101-1.overkiz.com"/>
+                <option label="Asia and Pacific" value="ha201-1.overkiz.com"/>
+                <option label="North America" value="ha401-1.overkiz.com"/>
             </options>
         </param>
         <param field="Mode2" label="Refresh interval" width="100px">
