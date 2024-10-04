@@ -71,7 +71,7 @@ class TahomaWebApi:
                 raise exceptions.LoginFailure("login failed, unhandled reason: "+strData)
 
             if (not self.__logged_in):
-                self.tahoma_login(username, password)
+                self.tahoma_login(username, password, base_url_web)
                 return
         return self.__logged_in
 
