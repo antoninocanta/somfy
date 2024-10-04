@@ -67,7 +67,7 @@ class Tahoma:
 
         return response.json()['authenticated']
         
-    def tahoma_login(self, username, password):
+    def tahoma_login(self, username, password, base_url_web):
 
         #url = self.base_url + '/enduser-mobile-web/enduserAPI/login'
         url = self.base_url + self.login_url 

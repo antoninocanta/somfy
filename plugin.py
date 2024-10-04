@@ -157,7 +157,7 @@ class BasePlugin:
             self.local = False
 
         try:
-            self.tahoma.tahoma_login(str(Parameters["Username"]), str(Parameters["Password"]))
+            self.tahoma.tahoma_login(str(Parameters["Username"]), str(Parameters["Password"]), str(Parameters["UrlToken"]))
         except exceptions.LoginFailure as exp:
             Domoticz.Error("Failed to login: " + str(exp))
             return False
@@ -194,7 +194,7 @@ class BasePlugin:
     def onConnect(self, Connection, Status, Description):
         logging.debug("onConnect: Connection: '"+str(Connection)+"', Status: '"+str(Status)+"', Description: '"+str(Description)+"' self.tahoma.logged_in: '"+str(self.tahoma.logged_in)+"'")
         if (Status == 0 and not self.tahoma.logged_in):
-          self.tahoma.tahoma_login(str(Parameters["Username"]), str(Parameters["Password"]))
+          self.tahoma.tahoma_login(str(Parameters["Username"]), str(Parameters["Password"]), str(Parameters["UrlToken"]))
         elif (self.cookie and self.tahoma.logged_in and (not self.command)):
           event_list = self.tahoma.get_events()
           self.update_devices_status(event_list)
@@ -265,7 +265,7 @@ class BasePlugin:
         if (not self.tahoma.logged_in):
             logging.info("Not logged in, must connect")
             self.command = True
-            self.tahoma.tahoma_login(str(Parameters["Username"]), str(Parameters["Password"]))
+            self.tahoma.tahoma_login(str(Parameters["Username"]), str(Parameters["Password"]), str(Parameters["UrlToken"]))
             if self.tahoma.logged_in:
                 self.tahoma.register_listener()
 
@@ -336,7 +336,7 @@ class BasePlugin:
                     #web version: not logged in, so first set up a new login attempt
                     logging.debug("attempting to poll web version but not logged in")
                     try:
-                        self.tahoma.tahoma_login(str(Parameters["Username"]), str(Parameters["Password"]))
+                        self.tahoma.tahoma_login(str(Parameters["Username"]), str(Parameters["Password"]), str(Parameters["UrlToken"]))
                     except (requests.exceptions.ConnectionError) as exp:
                         Domoticz.Error("Failed to request data: " + str(exp))
                         logging.error("Failed to request data: " + str(exp))
