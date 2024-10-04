@@ -25,9 +25,9 @@
             <description>==== general configuration ====</description>
         </param>
         <param field="Password" label="Password" width="200px" required="true" default="" password="true"/>
-        <param field="Mode5" label="Url token" width="200px" required="true" default="">
+        <param field = "Mode5" required="true" label="Connection" width="100px">
             <options>
-                <option label="Europe, Middle East and Africa" value="ha101-1.overkiz.com"/>
+                <option label="Europe, Middle East and Africa" value="ha101-1.overkiz.com" default="true"/>
                 <option label="Asia and Pacific" value="ha201-1.overkiz.com"/>
                 <option label="North America" value="ha401-1.overkiz.com"/>
             </options>
@@ -129,7 +129,7 @@ class BasePlugin:
             logging.basicConfig(format='%(asctime)s - %(levelname)-8s - %(filename)-18s - %(message)s', filename=log_fullname,level=logging.DEBUG)
         else:
             logging.basicConfig(format='%(asctime)s - %(levelname)-8s - %(filename)-18s - %(message)s', filename=log_fullname,level=logging.INFO)
-        Domoticz.Debug("os.path.exists(Parameters['Mode5']) = {}".format(os.path.exists(Parameters["Mode5"])))
+        #Domoticz.Debug("os.path.exists(Parameters['Mode5']) = {}".format(os.path.exists(Parameters["Mode5"])))
         logging.info("starting plugin version "+Parameters["Version"])
         self.runCounter = int(Parameters['Mode2'])
         Domoticz.Heartbeat(1)
